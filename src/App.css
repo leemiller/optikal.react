@@ -1,3 +1,5 @@
-.konvajs-content {
-    margin: 21px auto 0;
+.konvajs-content,
+#option-selections {
+    margin: 0 auto;
+    text-align: center;
 }
