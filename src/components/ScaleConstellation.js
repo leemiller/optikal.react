@@ -1,10 +1,13 @@
 import {CenterTextOffset, LocationOfPointAt} from "../util";
 import {Arrow, Group, Layer, Line, Text} from "react-konva";
+import {stageCenterPoint, wedgeAngle, wedgeRadius} from "../settings";
+import {useMemo} from "react";
+import * as PropType from "prop-types";
 
-const MakeLines = (points, centerPoint) => {
-    const attributes = (pos) => ({
+const MakeLines = (points) => {
+    const lineProperties = pos => ({
         listening: false,
-        points: [centerPoint, centerPoint, pos.x, pos.y],
+        points: [stageCenterPoint, stageCenterPoint, pos.x, pos.y],
         fill: 'white',
         stroke: 'white',
         strokeWidth: 2,
@@ -16,35 +19,36 @@ const MakeLines = (points, centerPoint) => {
         }
     })
     const [firstNotePoint, ...notePoints] = points
-    const lines = notePoints.map(p => {
-        return <Line
-            {...attributes(p.end)}
-            key={`${p.index}-line`}
-        />
-    })
-    lines.unshift(<Arrow
-        {...attributes(firstNotePoint.end)}
+    const lines = notePoints.map(p =>
+        (
+            <Line
+                {...lineProperties(p.lineEnd)}
+                key={`${p.index}-line`}
+            />
+        )
+    )
+    const arrow = (<Arrow
+        {...lineProperties(firstNotePoint.lineEnd)}
         key={`${firstNotePoint.index}-arrow`}
         pointerLength={12}
         pointerWidth={8}
         radius={10}
     />)
-    return lines
+    return [arrow, ...lines]
 }
 
-export const ScaleConstellation = ({scaleNoteIndexes, wedgeAngle, radius, centerPoint, labelOffset = 12}) => {
-    const startRotation = -90
-    const points = scaleNoteIndexes.map(i => {
-        const rotation = startRotation + wedgeAngle * i
+const ScaleConstellation = ({scaleNoteIndices, labelOffset = 12}) => {
+    const points = useMemo(() => scaleNoteIndices.map(i => {
+        const rotation = -90 + wedgeAngle * i
         return {
             index: i,
-            end: LocationOfPointAt(rotation, radius, centerPoint, centerPoint),
-            label: LocationOfPointAt(rotation, radius + labelOffset, centerPoint, centerPoint)
+            lineEnd: LocationOfPointAt(rotation, wedgeRadius, stageCenterPoint, stageCenterPoint),
+            label: LocationOfPointAt(rotation, wedgeRadius + labelOffset, stageCenterPoint, stageCenterPoint)
         }
-    })
-    const lines = MakeLines(points, centerPoint)
-    const labels = points.map((p, i) => {
-        return (
+    }), [scaleNoteIndices, labelOffset])
+    const lines = MakeLines(points)
+    const labels = points.map((p, i) =>
+        (
             <Text
                 x={p.label.x}
                 y={p.label.y}
@@ -52,13 +56,14 @@ export const ScaleConstellation = ({scaleNoteIndexes, wedgeAngle, radius, center
                 key={`${p.label.x},${p.label.y}-label`}
                 fontSize={18}
                 fill='white'
+                stroke='black'
+                strokeWidth={1}
+                fillAfterStrokeEnabled={true}
                 shadowColor='black'
                 shadowBlur={4}
-                shadowOpacity={1}
                 ref={CenterTextOffset}
             />
-        )
-    })
+        ))
     return (
         <Layer id="scale-constellation">
             <Group>{lines}</Group>
@@ -66,3 +71,8 @@ export const ScaleConstellation = ({scaleNoteIndexes, wedgeAngle, radius, center
         </Layer>
     )
 }
+ScaleConstellation.propTypes = {
+    scaleNoteIndices: PropType.array,
+    labelOffset: PropType.number
+}
+export default ScaleConstellation
