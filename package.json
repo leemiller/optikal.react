@@ -2,7 +2,7 @@
   "name": "optikal.react",
   "version": "1.0.0",
   "private": true,
-  "homepage": "http://leemiller.github.io/optikal.react",
+  "homepage": "https://leemiller.github.io/optikal.react/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.5",
