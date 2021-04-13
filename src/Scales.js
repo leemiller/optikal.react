@@ -1,4 +1,5 @@
 const Scales = {
+    '-None-': [],
     Acoustic: [0, 2, 4, 5, 6, 7, 9, 10],
     'Natural Minor': [0, 2,3, 5, 7, 8, 10],
     Algerian: [0, 2, 3, 6, 7, 8, 11],

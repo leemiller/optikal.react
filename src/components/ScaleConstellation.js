@@ -46,6 +46,10 @@ const ScaleConstellation = ({scaleNoteIndices, labelOffset = 12}) => {
             label: LocationOfPointAt(rotation, wedgeRadius + labelOffset, stageCenterPoint, stageCenterPoint)
         }
     }), [scaleNoteIndices, labelOffset])
+    if (points.length === 0) {
+        return null
+    }
+    
     const lines = MakeLines(points)
     const labels = points.map((p, i) =>
         (
