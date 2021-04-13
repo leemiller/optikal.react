@@ -5,13 +5,12 @@ import React from "react";
 import ColorWheelWedge from "./ColorWheelWedge";
 import HighlightWedge from "./HighlightWedge";
 import {labelDistanceFromCenter, stageCenterPoint, wedgeAngle} from "../settings";
-import PropTypes from "prop-types";
 import {useDispatch, useSelector} from "react-redux";
 import {changeSelectedNote} from "../actions";
 
 const ColorWheel = () => {
     const activeNote = useSelector(s => s.selectedNote)
-    const useFlats = useSelector(s=>s.useFlats)
+    const useFlats = useSelector(s => s.useFlats)
     const dispatch = useDispatch()
     const staticWedges = Notes.map((n, i) => (
         <ColorWheelWedge

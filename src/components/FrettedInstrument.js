@@ -55,7 +55,7 @@ const instrumentData = instrumentSettings => {
     }
 }
 
-export const FrettedInstrument = ({}) => {
+export const FrettedInstrument = () => {
     const currentInstrument = useSelector(s => s.instrument)
     const activeNote = useSelector(s => s.selectedNote)
     const scaleName = useSelector(s => s.scaleName)
