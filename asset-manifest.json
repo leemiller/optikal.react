@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/optikal.react/static/css/main.f291ba6d.chunk.css",
-    "main.js": "/optikal.react/static/js/main.d24435f1.chunk.js",
-    "main.js.map": "/optikal.react/static/js/main.d24435f1.chunk.js.map",
+    "main.js": "/optikal.react/static/js/main.ae7ef752.chunk.js",
+    "main.js.map": "/optikal.react/static/js/main.ae7ef752.chunk.js.map",
     "runtime-main.js": "/optikal.react/static/js/runtime-main.79082a73.js",
     "runtime-main.js.map": "/optikal.react/static/js/runtime-main.79082a73.js.map",
-    "static/js/2.2e3b6d7b.chunk.js": "/optikal.react/static/js/2.2e3b6d7b.chunk.js",
-    "static/js/2.2e3b6d7b.chunk.js.map": "/optikal.react/static/js/2.2e3b6d7b.chunk.js.map",
+    "static/js/2.bf0f2958.chunk.js": "/optikal.react/static/js/2.bf0f2958.chunk.js",
+    "static/js/2.bf0f2958.chunk.js.map": "/optikal.react/static/js/2.bf0f2958.chunk.js.map",
     "index.html": "/optikal.react/index.html",
     "static/css/main.f291ba6d.chunk.css.map": "/optikal.react/static/css/main.f291ba6d.chunk.css.map",
-    "static/js/2.2e3b6d7b.chunk.js.LICENSE.txt": "/optikal.react/static/js/2.2e3b6d7b.chunk.js.LICENSE.txt"
+    "static/js/2.bf0f2958.chunk.js.LICENSE.txt": "/optikal.react/static/js/2.bf0f2958.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.79082a73.js",
-    "static/js/2.2e3b6d7b.chunk.js",
+    "static/js/2.bf0f2958.chunk.js",
     "static/css/main.f291ba6d.chunk.css",
-    "static/js/main.d24435f1.chunk.js"
+    "static/js/main.ae7ef752.chunk.js"
   ]
 }
