@@ -3,6 +3,8 @@ import {Arrow, Group, Layer, Line, Text} from "react-konva";
 import {stageCenterPoint, wedgeAngle, wedgeRadius} from "../settings";
 import {useMemo} from "react";
 import * as PropType from "prop-types";
+import {useSelector} from "react-redux";
+import Scales from "../Scales";
 
 const MakeLines = (points) => {
     const lineProperties = pos => ({
@@ -37,7 +39,10 @@ const MakeLines = (points) => {
     return [arrow, ...lines]
 }
 
-const ScaleConstellation = ({scaleNoteIndices, labelOffset = 12}) => {
+const ScaleConstellation = ({labelOffset = 12}) => {
+    const scaleName = useSelector(s => s.scaleName)
+    const tonicIndex = useSelector(s => s.tonicIndex)
+    const scaleNoteIndices = Scales[scaleName].forTonic(tonicIndex)
     const points = useMemo(() => scaleNoteIndices.map(i => {
         const rotation = -90 + wedgeAngle * i
         return {
@@ -49,7 +54,7 @@ const ScaleConstellation = ({scaleNoteIndices, labelOffset = 12}) => {
     if (points.length === 0) {
         return null
     }
-    
+
     const lines = MakeLines(points)
     const labels = points.map((p, i) =>
         (
@@ -76,7 +81,6 @@ const ScaleConstellation = ({scaleNoteIndices, labelOffset = 12}) => {
     )
 }
 ScaleConstellation.propTypes = {
-    scaleNoteIndices: PropType.array,
     labelOffset: PropType.number
 }
 export default ScaleConstellation

@@ -1,7 +1,19 @@
-const Scales = {
+import Notes from "./Notes";
+
+export class Scale {
+    constructor(noteIndexArray) {
+        this.notes = noteIndexArray
+    }
+
+    forTonic(tonicIndex) {
+        return this.notes.map(ni => (ni + tonicIndex) % Notes.length)
+    }
+}
+
+const scalePositions = {
     '-None-': [],
     Acoustic: [0, 2, 4, 5, 6, 7, 9, 10],
-    'Natural Minor': [0, 2,3, 5, 7, 8, 10],
+    'Natural Minor': [0, 2, 3, 5, 7, 8, 10],
     Algerian: [0, 2, 3, 6, 7, 8, 11],
     Altered: [0, 1, 3, 4, 6, 8, 10],
     Augmented: [0, 3, 4, 7, 9, 11],
@@ -22,4 +34,5 @@ const Scales = {
     Iwato: [0, 1, 10, 5, 6],
     'Major Pentatonic Scale': [0, 2, 4, 7, 9]
 }
+const Scales = Object.fromEntries(Object.entries(scalePositions).map(([k, v]) => [k, new Scale(v)]))
 export default Scales

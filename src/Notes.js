@@ -4,6 +4,10 @@ export class Note {
         this.color = color
         this.altName = altName
     }
+
+    displayName(useFlats) {
+        return (useFlats && this.altName) || this.name
+    }
 }
 const Notes = [
     new Note('C', '#ff0000'),

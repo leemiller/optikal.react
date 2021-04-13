@@ -1,18 +1,19 @@
 import Notes from "../Notes";
-import PropTypes from "prop-types";
+import {useDispatch, useSelector} from "react-redux";
+import {changeTonic} from "../actions";
 
-const TonicSelector = ({tonicIndex, setTonicIndex, getNoteName}) => (
-    <select id="tonic" value={tonicIndex} onChange={e => setTonicIndex(parseInt(e.target.value, 10))}>
-        {
-            Notes.map((note, i) => (
-                <option key={note.name} value={i}>{getNoteName(note)}</option>
-            ))
-        }
-    </select>
-)
-TonicSelector.propTypes = {
-    tonicIndex: PropTypes.number.isRequired,
-    setTonicIndex: PropTypes.func.isRequired,
-    getNoteName: PropTypes.func.isRequired
+const TonicSelector = () => {
+    const tonicIndex = useSelector(s => s.tonicIndex)
+    const useFlats = useSelector(s => s.useFlats)
+    const dispatch = useDispatch()
+    return (
+        <select id="tonic" value={tonicIndex} onChange={e => dispatch(changeTonic(parseInt(e.target.value, 10)))}>
+            {
+                Notes.map((note, i) => (
+                    <option key={note.name} value={i}>{note.displayName(useFlats)}</option>
+                ))
+            }
+        </select>
+    );
 }
 export default TonicSelector

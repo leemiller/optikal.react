@@ -1,20 +1,25 @@
 import {Group, Layer, Text} from "react-konva";
 import {CenterTextOffset, LocationOfPointAt} from "../util";
-import Notes, {Note} from "../Notes";
+import Notes from "../Notes";
 import React from "react";
 import ColorWheelWedge from "./ColorWheelWedge";
 import HighlightWedge from "./HighlightWedge";
 import {labelDistanceFromCenter, stageCenterPoint, wedgeAngle} from "../settings";
 import PropTypes from "prop-types";
+import {useDispatch, useSelector} from "react-redux";
+import {changeSelectedNote} from "../actions";
 
-const ColorWheel = ({activeNote, setActiveNote, getNoteName}) => {
+const ColorWheel = () => {
+    const activeNote = useSelector(s => s.selectedNote)
+    const useFlats = useSelector(s=>s.useFlats)
+    const dispatch = useDispatch()
     const staticWedges = Notes.map((n, i) => (
         <ColorWheelWedge
             key={n.name}
             note={n}
             noteIndex={i}
-            onMouseOver={evt => setActiveNote(evt.target.attrs.note)}
-            onMouseOut={() => setActiveNote(null)}/>))
+            onMouseOver={evt => dispatch(changeSelectedNote(evt.target.attrs.note))}
+            onMouseOut={() => dispatch(changeSelectedNote(null))}/>))
     const labels = Notes.map((note, i) => {
         const pos = LocationOfPointAt((-90 + (wedgeAngle * i)), labelDistanceFromCenter, stageCenterPoint, stageCenterPoint)
 
@@ -23,7 +28,7 @@ const ColorWheel = ({activeNote, setActiveNote, getNoteName}) => {
                 key={note.name}
                 x={pos.x}
                 y={pos.y}
-                text={getNoteName(note)}
+                text={note.displayName(useFlats)}
                 id={`label-${note.name}`}
                 fontSize={24}
                 fill={'black'}
@@ -37,10 +42,5 @@ const ColorWheel = ({activeNote, setActiveNote, getNoteName}) => {
             <Group>{labels}</Group>
         </Layer>
     )
-}
-ColorWheel.propTypes = {
-    activeNote: PropTypes.instanceOf(Note),
-    setActiveNote: PropTypes.func.isRequired,
-    getNoteName: PropTypes.func.isRequired
 }
 export default ColorWheel

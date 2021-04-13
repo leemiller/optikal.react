@@ -1,8 +1,12 @@
 import Notes, {NoteSequence} from "../Notes";
-import {Group, Layer, Stage} from "react-konva";
+import {Group, Layer} from "react-konva";
 import {useMemo} from "react";
 import FretboardColoredNotes from "./FretboardColoredNotes";
 import Fretboard from "./Fretboard";
+import {useSelector} from "react-redux";
+import ReduxStage from "./ReduxStage";
+import {instrumentSettings} from "../settings";
+import Scales from "../Scales";
 
 // Precompute things like fret distances and widths, fret marker locations, and the position of each note on the fretboard
 // Without doing this upfront (and memoizing it!), performance tanks when changing the active note
@@ -51,39 +55,46 @@ const instrumentData = instrumentSettings => {
     }
 }
 
-export const FrettedInstrument = ({scaleNoteIndices, activeNote, instrumentSettings}) => {
-    const data = useMemo(() => instrumentData(instrumentSettings), [instrumentSettings])
-    const totalDistance = data.totalDistance
-    const fretboardHeight = instrumentSettings.strings.length * instrumentSettings.stringSectionHeight
+export const FrettedInstrument = ({}) => {
+    const currentInstrument = useSelector(s => s.instrument)
+    const activeNote = useSelector(s => s.selectedNote)
+    const scaleName = useSelector(s => s.scaleName)
+    const tonicIndex = useSelector(s => s.tonicIndex)
+    const scaleNoteIndices = Scales[scaleName].forTonic(tonicIndex)
 
-    const displayWidth = totalDistance + instrumentSettings.nutWidth + instrumentSettings.heelWidth
-    const displayHeight = fretboardHeight + instrumentSettings.bindingHeight
+    const settings = instrumentSettings[currentInstrument]
+    const data = useMemo(() => instrumentData(settings), [settings])
+    const totalDistance = data.totalDistance
+    const fretboardHeight = settings.strings.length * settings.stringSectionHeight
+
+    const displayWidth = totalDistance + settings.nutWidth + settings.heelWidth
+    const displayHeight = fretboardHeight + settings.bindingHeight
 
     const notesInScale = Object.fromEntries(scaleNoteIndices.map(ni => [Notes[ni].name, true]))
     return (
-        <Stage width={displayWidth} height={displayHeight}>
+        <ReduxStage stageWidth={displayWidth} stageHeight={displayHeight}>
             <Layer>
                 <Fretboard
                     fretDistancesFromNut={data.fretDistancesFromNut}
                     width={totalDistance}
                     displayWidth={displayWidth}
-                    nutWidth={instrumentSettings.nutWidth}
-                    fretWireWidth={instrumentSettings.fretWireWidth}
-                    bindingHeight={instrumentSettings.bindingHeight}
-                    boardColor={instrumentSettings.fretboardColor}
+                    nutWidth={settings.nutWidth}
+                    fretWireWidth={settings.fretWireWidth}
+                    bindingHeight={settings.bindingHeight}
+                    boardColor={settings.fretboardColor}
                     height={fretboardHeight}
                     fretMarkerLocations={data.fretMarkerLocations}/>
                 <Group>
                     {
-                        instrumentSettings.strings.map((sn, i) => (
+                        settings.strings.map((sn, i) => (
                             <FretboardColoredNotes
                                 frettedNotesPerString={data.frettedNotesPerString}
                                 fretDistancesFromNut={data.fretDistancesFromNut}
                                 fretWidths={data.fretWidths}
-                                fretWireWidth={instrumentSettings.fretWireWidth}
-                                numFrets={instrumentSettings.numFrets}
-                                padding={instrumentSettings.nutWidth}
-                                stringSectionHeight={instrumentSettings.stringSectionHeight}
+                                fretWireWidth={settings.fretWireWidth}
+                                numFrets={settings.numFrets}
+                                padding={settings.nutWidth}
+                                stringSectionHeight={settings.stringSectionHeight}
                                 key={`string-${i + 1}-${sn}`}
                                 stringIndex={i}
                                 activeNote={activeNote}
@@ -94,6 +105,6 @@ export const FrettedInstrument = ({scaleNoteIndices, activeNote, instrumentSetti
                     }
                 </Group>
             </Layer>
-        </Stage>
+        </ReduxStage>
     )
 }
